@@ -1,0 +1,172 @@
+        {/* Keypad */}
+        {calcesMode === 'COMP' && (
+          <div className="panel shrink-0 p-2.5">
+            {/* Controls */}
+            <div className="mb-1.5 grid grid-cols-6 gap-1.5">
+              <button
+                type="button"
+                aria-pressed={shiftActive}
+                onClick={() => {
+                  setShiftActive((v) => {
+                    const next = !v;
+                    if (next) setAlphaActive(false);
+                    return next;
+                  });
+                }}
+                className={`key h-10 min-h-0 ${shiftActive ? 'key-armed-amber' : 'key-fn'}`}
+              >
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em]">Shift</span>
+              </button>
+              <button
+                type="button"
+                aria-pressed={alphaActive}
+                onClick={() => {
+                  setAlphaActive((v) => {
+                    const next = !v;
+                    if (next) setShiftActive(false);
+                    return next;
+                  });
+                }}
+                className={`key h-10 min-h-0 ${alphaActive ? 'key-armed-violet' : 'key-fn'}`}
+              >
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em]">Alpha</span>
+              </button>
+
+              <div className="col-span-2 grid grid-cols-3 grid-rows-3 place-items-center rounded-[10px] border border-[#262A32] bg-[#0C0E11]">
+                <span />
+                <button
+                  type="button"
+                  aria-label="Previous entry"
+                  onClick={() => navigateHistory('up')}
+                  className="p-0.5 text-[#6B7079] transition-colors hover:text-[#ECEDEF]"
+                >
+                  <ChevronUp className="h-3.5 w-3.5" />
+                </button>
+                <span />
+                <button
+                  type="button"
+                  aria-label="Cursor left"
+                  onClick={() => moveCursor('left')}
+                  className="p-0.5 text-[#6B7079] transition-colors hover:text-[#ECEDEF]"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                </button>
+                <span className="font-mono text-[7.5px] tracking-[0.1em] text-[#5D626C]">REPLAY</span>
+                <button
+                  type="button"
+                  aria-label="Cursor right"
+                  onClick={() => moveCursor('right')}
+                  className="p-0.5 text-[#6B7079] transition-colors hover:text-[#ECEDEF]"
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+                <span />
+                <button
+                  type="button"
+                  aria-label="Next entry"
+                  onClick={() => navigateHistory('down')}
+                  className="p-0.5 text-[#6B7079] transition-colors hover:text-[#ECEDEF]"
+                >
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </button>
+                <span />
+              </div>
+
+              <button type="button" onClick={handleModePress} className="key key-fn h-10 min-h-0">
+                <span className="key-legend key-legend-left">setup</span>
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em]">Mode</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleAllClear}
+                aria-label="Power on / all clear"
+                className="key key-danger h-10 min-h-0"
+              >
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em]">On</span>
+              </button>
+            </div>
+
+            {/* Scientific functions — one key per function */}
+            <div className="grid grid-cols-6 gap-1.5">
+              {renderKey('x²', '^2', 'x³', '^3', 'E', () => handleVariableKey('E'))}
+              {renderKey('xʸ', '^', 'ʸ√', '^(1/', 'F', () => handleVariableKey('F'))}
+              {renderKey('√', 'sqrt(', '∛', 'cbrt(', 'D', () => handleVariableKey('D'))}
+              {renderKey('log', 'log10(', '10ˣ', '10^(', 'X', () => handleVariableKey('X'))}
+              {renderKey('ln', 'ln(', 'eˣ', 'exp(', 'Y', () => handleVariableKey('Y'))}
+              {renderKey('π', 'pi', 'e', 'e')}
+
+              {renderKey('sin', 'sin(', 'sin⁻¹', 'asin(')}
+              {renderKey('cos', 'cos(', 'cos⁻¹', 'acos(')}
+              {renderKey('tan', 'tan(', 'tan⁻¹', 'atan(')}
+              {renderKey('∫dx', 'integral(', 'd/dx', 'd/dx(')}
+              {renderKey('Σ', 'sum(', 'logᵦ', 'logBase(', 'B', () => handleVariableKey('B'))}
+              {renderKey('hyp', () => setHypModalOpen(true))}
+
+              {renderKey('(', '(', 'Pol(', 'Pol(')}
+              {renderKey(')', ')', 'Rec(', 'Rec(')}
+              {renderKey('1/x', '^(-1)', 'x!', 'fact(', 'C', () => handleVariableKey('C'))}
+              {renderKey('a/b', '/', undefined, undefined, 'A', () => handleVariableKey('A'))}
+              {renderKey('S⇔D', toggleStandardDecimal)}
+              {renderKey('∠', '∠', '°  ′  ″', ' deg', 'i', 'i')}
+
+              {renderKey('STO', () => {
+                setStoActive((v) => !v);
+                setRclActive(false);
+              })}
+              {renderKey('RCL', () => {
+                setRclActive((v) => !v);
+                setStoActive(false);
+              })}
+              {renderKey('CONST', () => insertToken('299792458'), '×10ˣ', '*10^')}
+              {renderKey(
+                'M+',
+                () => {
+                  const val = liveEval.numericValue ?? ans;
+                  setMemoryM((m) => m + val);
+                  showStatus(`M+ (${val}) → M = ${memoryM + val}`);
+                },
+                'M−',
+                () => {
+                  const val = liveEval.numericValue ?? ans;
+                  setMemoryM((m) => m - val);
+                  showStatus(`M− (${val}) → M = ${memoryM - val}`);
+                }
+              )}
+              {renderKey('%', '%', 'ENG', () => setOutputFormat('engineering'))}
+              {renderKey('Rnd', 'round(', 'Ran#', 'Ran()', 'RanInt', 'RanInt(1, 10)')}
+            </div>
+
+            {/* Numeric block */}
+            <div className="mt-1.5 grid grid-cols-6 gap-1.5">
+              {renderKey('7', '7', undefined, undefined, undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('8', '8', undefined, undefined, undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('9', '9', undefined, undefined, undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('÷', '/', 'nCr', 'nCr(', 'LCM', 'lcm(', 'key-op')}
+              {renderKey('×', '*', 'nPr', 'nPr(', 'GCD', 'gcd(', 'key-op')}
+              {renderKey('DEL', handleBackspace, undefined, undefined, undefined, undefined, 'key-danger text-[11px] uppercase tracking-[0.08em]')}
+
+              {renderKey('4', '4', 'MATRIX', () => setCalcesMode('MATRIX'), 'A', () => handleVariableKey('A'), 'key-fn font-semibold')}
+              {renderKey('5', '5', 'VECTOR', () => setCalcesMode('VECTOR'), 'B', () => handleVariableKey('B'), 'key-fn font-semibold')}
+              {renderKey('6', '6', 'STAT', () => setCalcesMode('STAT'), 'C', () => handleVariableKey('C'), 'key-fn font-semibold')}
+              {renderKey('−', '-', undefined, undefined, 'abs', 'abs(', 'key-op')}
+              {renderKey('+', '+', undefined, undefined, 'mod', 'mod(', 'key-op')}
+              {renderKey('AC', handleAllClear, undefined, undefined, undefined, undefined, 'key-danger text-[11px] uppercase tracking-[0.08em]')}
+
+              {renderKey('1', '1', 'EQN', () => setCalcesMode('EQN'), undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('2', '2', 'CMPLX', () => setCalcesMode('CMPLX'), undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('3', '3', 'BASE-N', () => setCalcesMode('BASE-N'), undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('0', '0', undefined, undefined, undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('.', '.', undefined, undefined, undefined, undefined, 'key-fn font-semibold')}
+              {renderKey('Ans', 'ans', undefined, undefined, undefined, undefined, 'key-fn text-[12px]')}
+
+              <button
+                type="button"
+                onClick={handleCommit}
+                className="key key-primary col-span-6 h-11 min-h-0"
+              >
+                <span className="font-mono text-[13px] font-semibold tracking-[0.06em]">=</span>
+              </button>
+            </div>
+          </div>
+        )}
+

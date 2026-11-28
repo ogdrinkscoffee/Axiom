@@ -1,0 +1,16 @@
+{
+  "short_name": "Axiom",
+  "name": "Axiom — Scientific Calculator, 2D/3D Grapher & STEM CAD Studio",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0A0B0D",
+  "theme_color": "#0A0B0D",
+  "display": "standalone",
+  "orientation": "any"
+}
