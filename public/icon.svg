@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="128" fill="#080B10"/>
+  <rect x="16" y="16" width="480" height="480" rx="112" stroke="#182232" stroke-width="4"/>
+  <!-- Coordinate Axis -->
+  <path d="M128 256H384M256 128V384" stroke="#1E2A3C" stroke-width="4" stroke-dasharray="8 8"/>
+  <!-- Precision Mathematical Manifold (Infinity / Hyperbola) -->
+  <path d="M160 320C220 320 236 192 256 192C276 192 292 320 352 320C400 320 416 280 416 256C416 232 400 192 352 192C292 192 276 320 256 320C236 320 220 192 160 192C112 192 96 232 96 256C96 280 112 320 160 320Z" stroke="#22D3EE" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Tangent & Singularity Focal Points -->
+  <circle cx="256" cy="256" r="14" fill="#F59E0B"/>
+  <circle cx="160" cy="256" r="8" fill="#22D3EE"/>
+  <circle cx="352" cy="256" r="8" fill="#22D3EE"/>
+</svg>

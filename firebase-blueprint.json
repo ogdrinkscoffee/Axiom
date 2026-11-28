@@ -1,0 +1,251 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user account profile isolated to the authenticated owner.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "createdAt", "updatedAt"]
+    },
+    "SavedFormula": {
+      "title": "SavedFormula",
+      "description": "Cloud-synced mathematical formula or graph expression belonging to a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "expression": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["calc", "graph2d", "graph3d"]
+        },
+        "color": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 16,
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "ownerId", "expression", "label", "mode", "color", "visible", "createdAt", "updatedAt"]
+    },
+    "ResearchWorkspace": {
+      "title": "ResearchWorkspace",
+      "description": "Collaborative STEM and CAD peer research workspace.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "domain": {
+          "type": "string",
+          "enum": ["math", "physics", "chemistry", "electrical", "cs", "cad"]
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["private", "shared"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "ownerId", "ownerName", "title", "domain", "visibility", "createdAt", "updatedAt"]
+    },
+    "WorkspaceMember": {
+      "title": "WorkspaceMember",
+      "description": "Verified participant inside a collaborative research workspace.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "role": {
+          "type": "string",
+          "enum": ["owner", "researcher"]
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "workspaceId", "displayName", "role", "joinedAt"]
+    },
+    "WorkspaceItem": {
+      "title": "WorkspaceItem",
+      "description": "Real-time shared formula, graph equation, CAD shape, or research note inside a workspace.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["formula", "graph", "cad", "note"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "expression": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "color": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 16,
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "workspaceId", "authorId", "authorName", "kind", "title", "expression", "color", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile documents restricted to the owner."
+    },
+    "/users/{userId}/formulas/{formulaId}": {
+      "schema": { "$ref": "#/entities/SavedFormula" },
+      "description": "Cloud-synced formulas and graph curves private to the user."
+    },
+    "/workspaces/{workspaceId}": {
+      "schema": { "$ref": "#/entities/ResearchWorkspace" },
+      "description": "Collaborative peer research workspaces."
+    },
+    "/workspaces/{workspaceId}/members/{memberId}": {
+      "schema": { "$ref": "#/entities/WorkspaceMember" },
+      "description": "Workspace membership subcollection for Master Gate authorization."
+    },
+    "/workspaces/{workspaceId}/items/{itemId}": {
+      "schema": { "$ref": "#/entities/WorkspaceItem" },
+      "description": "Shared formulas, graphs, CAD specifications, and peer research notes."
+    }
+  }
+}
